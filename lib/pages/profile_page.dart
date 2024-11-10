@@ -350,6 +350,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         isEdit==false?pl_in_bi.tr.capitalizeFirst.toString():"",
                         isEdit==false?TextInputType.number:TextInputType.text,
                         false,
+                        false,
                         (){},
                         isEdit==false?[FilteringTextInputFormatter.digitsOnly]:[FilteringTextInputFormatter.singleLineFormatter],
                         isEdit==false?"salery.png":"edit.png",

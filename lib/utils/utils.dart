@@ -171,6 +171,7 @@ class Utils{
       String hintText,
       TextInputType textType,
       bool obsure,
+      bool read,
       VoidCallback onSuffix,
       List<TextInputFormatter> inputFormatter,
       String prefixImageLocation,
@@ -182,6 +183,7 @@ class Utils{
         controller: controller,
         obscureText: obsure,
         obscuringCharacter: "*",
+        readOnly: read,
         keyboardType: textType,
         inputFormatters: inputFormatter,
         decoration: InputDecoration(

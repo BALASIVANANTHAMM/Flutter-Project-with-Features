@@ -61,6 +61,21 @@ class Api{
     }
   }
 
+  verifyEmail({
+    required BuildContext context,
+    required String email,
+    required VoidCallback function,
+    required List<String> userList
+})async{
+    try{
+      userList=await authentication.fetchSignInMethodsForEmail(email);
+      function.call();
+    }catch(e){
+      Utils().log(e);
+      Utils().snackBar(context, "Something went wrong!");
+    }
+  }
+
   changePassword({
     required BuildContext context,
     required String userEmail,
@@ -80,7 +95,22 @@ class Api{
       });
     }).catchError((err) {
       Utils().log(err);
-    });}
+    });
+  }
+
+  forgotPassword({
+    required String email,
+    required BuildContext context,
+    required VoidCallback function
+})async{
+    try {
+      await authentication.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (err) {
+      throw Exception(err.message.toString());
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
 
   addDataFromUi({
     required Map<String,dynamic> fields,

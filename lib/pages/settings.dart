@@ -1,9 +1,10 @@
+import 'package:about/about.dart';
 import 'package:expense_tracker/controls/get_controller.dart';
 import 'package:expense_tracker/pages/change_password.dart';
 import 'package:expense_tracker/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:package_info_plus/package_info_plus.dart';
 import '../controls/text.dart';
 import '../utils/color_const.dart';
 import '../utils/constants.dart';
@@ -27,6 +28,56 @@ class _SettingsScreenState extends State<SettingsScreen> {
     "தமிழ்",
     "English"
   ];
+
+  final aboutPage = AboutPage(
+    values: {
+      'version': "${PackageInfo.fromPlatform(
+        baseUrl: "dfghjk"
+      )}",
+      'buildNumber': "",
+      'year': DateTime.now().year.toString(),
+      'author': "Pubspec.authorsName",
+    },
+    title: const Text('About'),
+    applicationVersion: 'Version {{ version }}, build #{{ buildNumber }}',
+    applicationDescription: const Text(
+      "Pubspec.description",
+      textAlign: TextAlign.justify,
+    ),
+    applicationIcon: const FlutterLogo(size: 100),
+    applicationLegalese: 'Copyright © {{ author }}, {{ year }}',
+    children: const <Widget>[
+      MarkdownPageListTile(
+        filename: 'README.md',
+        title: Text('View Readme'),
+        icon: Icon(Icons.all_inclusive),
+      ),
+      MarkdownPageListTile(
+        filename: 'CHANGELOG.md',
+        title: Text('View Changelog'),
+        icon: Icon(Icons.view_list),
+      ),
+      MarkdownPageListTile(
+        filename: 'LICENSE.md',
+        title: Text('View License'),
+        icon: Icon(Icons.description),
+      ),
+      MarkdownPageListTile(
+        filename: 'CONTRIBUTING.md',
+        title: Text('Contributing'),
+        icon: Icon(Icons.share),
+      ),
+      MarkdownPageListTile(
+        filename: 'CODE_OF_CONDUCT.md',
+        title: Text('Code of conduct'),
+        icon: Icon(Icons.sentiment_satisfied),
+      ),
+      LicensesPageListTile(
+        title: Text('Open source Licenses'),
+        icon: Icon(Icons.favorite),
+      ),
+    ],
+  );
 
   @override
   void initState() {
@@ -224,29 +275,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: currentWidth>SIZE_600?20:10
-                      ),
-                      decoration: BoxDecoration(
-                          color: AppTheme.white,
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: ListTile(
-                        leading: CText(
-                          text: ab_se.tr,
-                          fontSize: AppTheme.medium,
-                          fontWeight: FontWeight.w600,
+                    GestureDetector(
+                      onTap: (){
+                        Get.to(aboutPage);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: currentWidth>SIZE_600?20:10
                         ),
-                        trailing: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              color: AppTheme.white
+                        decoration: BoxDecoration(
+                            color: AppTheme.white,
+                            borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: ListTile(
+                          leading: CText(
+                            text: ab_se.tr,
+                            fontSize: AppTheme.medium,
+                            fontWeight: FontWeight.w600,
                           ),
-                          child: Image.asset(
-                              height: 24,
-                              width: 24,
-                              "${ASSET_PATH}right_arrow.png"),
+                          trailing: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                color: AppTheme.white
+                            ),
+                            child: Image.asset(
+                                height: 24,
+                                width: 24,
+                                "${ASSET_PATH}right_arrow.png"),
+                          ),
                         ),
                       ),
                     )

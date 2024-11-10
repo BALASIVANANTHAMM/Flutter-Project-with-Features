@@ -144,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       e_hint.tr,
                       TextInputType.text,
                       false,
+                      false,
                           (){},
                       [FilteringTextInputFormatter.singleLineFormatter],
                       "mail.png",
@@ -155,6 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       p_hint.tr,
                       TextInputType.text,
                       pass,
+                      false,
                           (){
                         setState(() {
                           pass=!pass;

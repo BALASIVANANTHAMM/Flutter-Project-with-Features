@@ -243,6 +243,7 @@ class _HomeState extends State<Home> {
                           en_am_hint.tr,
                           TextInputType.number,
                           false,
+                          false,
                           (){},
                           [FilteringTextInputFormatter.digitsOnly],
                           "person.png",
@@ -267,6 +268,7 @@ class _HomeState extends State<Home> {
                           notesCtl,
                           not_hint.tr,
                           TextInputType.text,
+                          false,
                           false,
                               (){},
                           [FilteringTextInputFormatter.singleLineFormatter],
@@ -294,9 +296,7 @@ class _HomeState extends State<Home> {
                             underline: const Text(""),
                             borderRadius: BorderRadius.circular(10),
                             padding: const EdgeInsets.only(left: 10,right: 10),
-                            hint:  Flexible(
-                                flex: 1,
-                                child: CText(text:sel_ca_bi.tr,overflow: TextOverflow.ellipsis,)),
+                            hint:  CText(text:sel_ca_bi.tr,overflow: TextOverflow.ellipsis,),
                             icon: Image.asset(
                                 height: 24,
                                 width: 24,
@@ -304,7 +304,7 @@ class _HomeState extends State<Home> {
                             items: menuItems.map((items) {
                               return DropdownMenuItem(
                                 value: items,
-                                child: Flexible(child: CText(text: items,overflow: TextOverflow.ellipsis,)),
+                                child: CText(text: items,overflow: TextOverflow.ellipsis,),
                               );
                             }).toList(),
                             onChanged: (String? newValue) {

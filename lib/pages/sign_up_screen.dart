@@ -95,6 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       n_hint.tr,
                       TextInputType.text,
                       false,
+                      false,
                           (){},
                       [FilteringTextInputFormatter.singleLineFormatter],
                       "person.png",
@@ -105,6 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       emailCtl,
                       e_hint.tr,
                       TextInputType.text,
+                      false,
                       false,
                           (){},
                       [FilteringTextInputFormatter.singleLineFormatter],
@@ -117,6 +119,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       dob_si.tr,
                       TextInputType.text,
                       false,
+                      true,
                           (){
                         selectDate();
                       },
@@ -130,6 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       p_hint.tr,
                       TextInputType.text,
                       pass,
+                      false,
                           (){
                         setState(() {
                           pass=!pass;
@@ -146,6 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       c_hint.tr,
                       TextInputType.text,
                       true,
+                      false,
                           (){},
                       [FilteringTextInputFormatter.singleLineFormatter],
                       "password.png",
@@ -217,6 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       incomeCtl,
                       "Enter Income Here",
                       TextInputType.number,
+                      false,
                       false,
                           (){},
                       [FilteringTextInputFormatter.digitsOnly],

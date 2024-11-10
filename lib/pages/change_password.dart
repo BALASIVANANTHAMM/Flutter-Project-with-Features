@@ -145,6 +145,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         p_hint.tr,
                         TextInputType.text,
                         pass,
+                        false,
                             (){
                           setState(() {
                             pass=!pass;
@@ -161,6 +162,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         new_bo.tr,
                         TextInputType.text,
                         true,
+                        false,
                             (){},
                         [FilteringTextInputFormatter.singleLineFormatter],
                         "password.png",
@@ -172,6 +174,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         c_hint.tr,
                         TextInputType.text,
                         true,
+                        false,
                             (){},
                         [FilteringTextInputFormatter.singleLineFormatter],
                         "password.png",
