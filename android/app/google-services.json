@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "117362387323",
+    "project_id": "expense-af9b2",
+    "storage_bucket": "expense-af9b2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117362387323:android:4ba9adf79c6fc5f06c35de",
+        "android_client_info": {
+          "package_name": "com.siva.expense_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcCKCe-msIBVF_40d2UgogpjXKxpGYFT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
