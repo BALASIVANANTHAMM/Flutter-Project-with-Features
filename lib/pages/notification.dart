@@ -196,32 +196,50 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   textColor: dummyList[index].title=="Log Out"?AppTheme.red:AppTheme.green,
                 ),
                 CText(
-                  text: dummyList[index].time,
+                  text: "${dummyList[index].date}",
                   fontWeight: FontWeight.w500,
                   fontSize: AppTheme.medium,
+                   textColor:dummyList[index].title=="Log Out"?AppTheme.red:AppTheme.green
                 )
               ],
             ),
             const SizedBox(height: 5,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: CText(
-                    text: dummyList[index].value,
-                    fontSize: AppTheme.large,
-                    fontWeight: FontWeight.w500,
-                    textColor: AppTheme.grey,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                CText(
-                  text: dummyList[index].date,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AppTheme.medium,
-                  textColor: dummyList[index].title=="Log Out"?AppTheme.red:AppTheme.green,
-                )
-              ],
+            Divider(color: AppTheme.grey.withOpacity(0.4),),
+            const SizedBox(height: 5,),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //
+            //     CText(
+            //       text: dummyList[index].date,
+            //       fontWeight: FontWeight.w500,
+            //       fontSize: AppTheme.medium,
+            //       textColor: dummyList[index].title=="Log Out"?AppTheme.red:AppTheme.green,
+            //     )
+            //   ],
+            // ),
+            CText(
+              text: dummyList[index].value,
+              fontSize: AppTheme.large,
+              fontWeight: FontWeight.w500,
+              textColor: dummyList[index].title=="Log Out"?AppTheme.red:AppTheme.green,
+              overflow: TextOverflow.visible,
+            ),
+            const SizedBox(height: 5,),
+            CText(
+              text: "Location :",
+              fontSize: AppTheme.medium_15,
+              fontWeight: FontWeight.w400,
+              textColor: AppTheme.grey,
+              overflow: TextOverflow.visible,
+            ),
+            const SizedBox(height: 5,),
+            CText(
+              text: dummyList[index].address,
+              fontSize: AppTheme.large,
+              fontWeight: FontWeight.w500,
+              textColor: AppTheme.black,
+              overflow: TextOverflow.visible,
             ),
           ],
         ),

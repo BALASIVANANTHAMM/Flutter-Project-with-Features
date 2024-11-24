@@ -1,8 +1,11 @@
 import 'package:about/about.dart';
 import 'package:expense_tracker/controls/get_controller.dart';
+import 'package:expense_tracker/controls/secure_storage.dart';
 import 'package:expense_tracker/pages/change_password.dart';
 import 'package:expense_tracker/pages/home.dart';
+import 'package:expense_tracker/utils/Utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../controls/text.dart';
@@ -20,52 +23,40 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
 
   var currentWidth = 0.0;
-  bool isLoading=true,security= false;
+  bool isLoading=true;
+  bool security=false;
   String? initialValue;
+  String? secureStore;
   var storeUserData=StoreUserData();
   var controller = LangController();
   var menuItems = [
     "தமிழ்",
     "English"
   ];
+  var bioStore= BioStorage();
 
   final aboutPage = AboutPage(
     values: {
-      'version': "${PackageInfo.fromPlatform(
-        baseUrl: "dfghjk"
-      )}",
-      'buildNumber': "",
+      'version': "1.0.0+1",
       'year': DateTime.now().year.toString(),
-      'author': "Pubspec.authorsName",
+      'author': "balasivanantham",
     },
     title: const Text('About'),
-    applicationVersion: 'Version {{ version }}, build #{{ buildNumber }}',
+    applicationVersion: 'Version {{ version }}',
     applicationDescription: const Text(
-      "Pubspec.description",
+      "This App purpose is new feature included to track the monthy expenses",
       textAlign: TextAlign.justify,
     ),
-    applicationIcon: const FlutterLogo(size: 100),
+    applicationIcon: Image.asset(
+        height: 100,
+        width: 100,
+        "${ASSET_PATH}app_logo.png"),
     applicationLegalese: 'Copyright © {{ author }}, {{ year }}',
     children: const <Widget>[
-      MarkdownPageListTile(
-        filename: 'README.md',
-        title: Text('View Readme'),
-        icon: Icon(Icons.all_inclusive),
-      ),
-      MarkdownPageListTile(
-        filename: 'CHANGELOG.md',
-        title: Text('View Changelog'),
-        icon: Icon(Icons.view_list),
-      ),
       MarkdownPageListTile(
         filename: 'LICENSE.md',
         title: Text('View License'),
         icon: Icon(Icons.description),
-      ),
-      MarkdownPageListTile(
-        filename: 'CONTRIBUTING.md',
-        title: Text('Contributing'),
-        icon: Icon(Icons.share),
       ),
       MarkdownPageListTile(
         filename: 'CODE_OF_CONDUCT.md',
@@ -79,6 +70,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ],
   );
 
+  bool getValue(){
+    secureStore=bioStore.getString(security_secure);
+    Utils().log(bioStore.getString(security_secure));
+    if(secureStore!.isNotEmpty){
+      security = true;
+      return true;
+    }else{
+      security=false;
+      return false;
+    }
+  }
+
   @override
   void initState() {
     setState(() {
@@ -88,6 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if(storeUserData.getString(LANG)=="en"){
         initialValue="English";
       }
+      // getValue();
     });
     super.initState();
   }
@@ -169,25 +173,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ],
                     ),
                     const SizedBox(height: 24,),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppTheme.white,
-                        borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: SwitchListTile(
-                        title: CText(
-                            text: sec_bi.tr,
-                          fontSize: AppTheme.medium,
-                          fontWeight: FontWeight.w600,
-                        ),
-                          value: security,
-                          activeTrackColor: AppTheme.colorPrimary,
-                          onChanged: (value){
-                            setState(() {
-                              security=!security;
-                            });
-                          }),
-                    ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     color: AppTheme.white,
+                    //     borderRadius: BorderRadius.circular(15)
+                    //   ),
+                    //   child: SwitchListTile(
+                    //     title: CText(
+                    //         text: sec_bi.tr,
+                    //       fontSize: AppTheme.medium,
+                    //       fontWeight: FontWeight.w600,
+                    //     ),
+                    //       value: security,
+                    //       activeTrackColor: AppTheme.colorPrimary,
+                    //       onChanged: (value)async{
+                    //         setState(() {
+                    //           security=!security;
+                    //         });
+                    //       }),
+                    // ),
                     Container(
                       margin: EdgeInsets.only(
                         top: currentWidth>SIZE_600?20:10

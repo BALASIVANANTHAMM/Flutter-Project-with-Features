@@ -76,6 +76,7 @@ class AppTranslations extends Translations {
       ch_pa_bi:'Change Password',
       ab_se:'About',
       new_bo:'New Password',
+      new_or:'OR',
     },
     'ta_LK': {
       wel_1: 'உங்கள் பட்ஜெட்டை உருவாக்கவும்',
@@ -149,6 +150,7 @@ class AppTranslations extends Translations {
       ch_pa_bi:'கடவுச்சொல் மாற்ற',
       ab_se:'பற்றி',
       new_bo:'புதிய கடவுச்சொல்',
+      new_or:'அல்லது',
     }
   };
 }

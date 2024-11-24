@@ -529,7 +529,10 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                       Utils().getImage(list[index].statusId!),
                       list,
                       index,
-                      Utils().getColor(list[index].statusId!)
+                      Utils().getColor(list[index].statusId!),
+                      (){
+                        showLocationDialog(list[index]);
+                      }
                   );
                 },
 
@@ -566,6 +569,234 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
             )
         )
       ],
+    );
+  }
+  showLocationDialog(Expenses expense){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12)
+          ),
+          backgroundColor: AppTheme.light,
+          content: StatefulBuilder(
+            builder: (BuildContext context, void Function(void Function()) setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CText(
+                        text: "Expense Details",
+                        fontSize: AppTheme.big,
+                        textAlign: TextAlign.center,
+                        fontWeight: FontWeight.w600,
+                        textColor: AppTheme.red,
+                      ),
+                      GestureDetector(
+                          onTap: (){
+                            Get.back();
+                          },
+                          child: const Icon(Icons.cancel_outlined))
+                    ],
+                  ),
+                  const SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CText(
+                            text: "Category",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w500,
+                            textColor: AppTheme.grey,
+                          ),
+                          CText(
+                            text: "${expense.status}",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppTheme.black,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CText(
+                            text: "Amount",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w500,
+                            textColor: AppTheme.grey,
+                          ),
+                          CText(
+                            text: "₹${expense.amount}",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppTheme.black,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CText(
+                            text: "Sort   ",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.start,
+                            fontWeight: FontWeight.w500,
+                            textColor: AppTheme.grey,
+                          ),
+                          CText(
+                            text: "${expense.sort}",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.start,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppTheme.black,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CText(
+                            text: "Filter",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w500,
+                            textColor: AppTheme.grey,
+                          ),
+                          CText(
+                            text: "${expense.filter}",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppTheme.black,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CText(
+                            text: "Date",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w500,
+                            textColor: AppTheme.grey,
+                          ),
+                          CText(
+                            text: "${expense.date}",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppTheme.black,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CText(
+                            text: "Time",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w500,
+                            textColor: AppTheme.grey,
+                          ),
+                          CText(
+                            text: "${expense.time}",
+                            fontSize: AppTheme.large,
+                            textAlign: TextAlign.center,
+                            fontWeight: FontWeight.w600,
+                            textColor: AppTheme.black,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CText(
+                        text: "Location",
+                        fontSize: AppTheme.large,
+                        textAlign: TextAlign.center,
+                        fontWeight: FontWeight.w500,
+                        textColor: AppTheme.grey,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.location_on_outlined),
+                          Flexible(
+                            child: CText(
+                              text: "${expense.address}",
+                              fontSize: AppTheme.large,
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.visible,
+                              fontWeight: FontWeight.w600,
+                              textColor: AppTheme.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CText(
+                        text: "Notes",
+                        fontSize: AppTheme.large,
+                        textAlign: TextAlign.start,
+                        fontWeight: FontWeight.w500,
+                        textColor: AppTheme.grey,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.5,right: 10.5,top: 4),
+                        height: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppTheme.grey.withOpacity(0.2))
+                        ),
+                        child: CText(
+                          text: "${expense.notes}",
+                          fontSize: AppTheme.large,
+                          textAlign: TextAlign.start,
+                          fontWeight: FontWeight.w600,
+                          textColor: AppTheme.black,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              );
+            },),
+        );
+      },
+
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expense_tracker/controls/local_auth.dart';
+import 'package:expense_tracker/controls/secure_storage.dart';
 import 'package:expense_tracker/controls/text.dart';
 import 'package:expense_tracker/models/profile_model.dart';
 import 'package:expense_tracker/pages/home.dart';
@@ -8,8 +10,10 @@ import 'package:expense_tracker/utils/api.dart';
 import 'package:expense_tracker/utils/store_user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import '../utils/color_const.dart';
 import '../utils/constants.dart';
@@ -29,7 +33,53 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordCtl = TextEditingController();
   bool pass=true,remember=false,isLoading=false;
   bool? isActive;
+  String? securityStorage;
+  String? email;
+  String? password;
   List<Profile> profile = [];
+  final storage = const FlutterSecureStorage(aOptions:AndroidOptions(
+    encryptedSharedPreferences: true,
+  ));
+  Position? _currentLoc;
+  String? address;
+  Future<Position?> _getCurrentPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  getAddress()async{
+    Position? position = await _getCurrentPosition();
+    setState(() {
+      _currentLoc=position;
+    });
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        _currentLoc!.latitude, _currentLoc!.longitude);
+
+    setState(() {
+      address="${placemarks[0].street}, ${placemarks[0].thoroughfare}, ${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].administrativeArea} - ${placemarks[0].postalCode}";
+    });
+    print(address);
+  }
 
   getProfile() async{
     QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -58,6 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 fields: {
                   "dateNow":DateTime.now(),
                   "title":"Logged In",
+                  "latitude":"${_currentLoc!.latitude}",
+                  "longitude":"${_currentLoc!.longitude}",
+                  "currentAddress":"$address",
                   "date":Utils().formatDate(DateTime.now(), DateFormat.yMMMd()),
                   "time":Utils().formatDate(DateTime.now(), DateFormat.jm()),
                   "value":"Account Logged in ${Utils().formatDate(DateTime.now(), DateFormat.yMMMd().add_jm())}",
@@ -75,8 +128,24 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+   getStore()async{
+    securityStorage=await storage.read(key: security_secure);
+    email = await storage.read(key: email_secure);
+    password = await storage.read(key: password_secure);
+  }
+
+  @override
+  void initState() {
+    getAddress();
+    setState(() {
+      getStore();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body:
@@ -196,7 +265,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       Api().loginWithEmailAndPassword(
                           emailCtl.text,
                           passwordCtl.text,
-                              (){
+                              ()async{
+                                await storage.write(key: email_secure, value: emailCtl.text);
+                                await storage.write(key: password_secure, value: passwordCtl.text);
                             if(remember==true){
                               storeUserData.setBoolean(LOGGED_IN, true);
                             }
@@ -210,6 +281,55 @@ class _LoginScreenState extends State<LoginScreen> {
                       Utils().snackBar(context, e_r_p.tr);
                     }
                   }),
+                  storage.read(key:email_secure)!=null
+                 ?Column(
+                   children: [
+                    // email!=null
+                     //    ?
+                     const SizedBox(height: 20,),
+                       //  :Container(),
+                     // email!=null
+                     //     ?
+                     CText(text: new_or.tr),
+                     //     :Container(),
+                     // email!=null
+                     //     ?
+                     const SizedBox(height: 15,),
+                     //     :Container(),
+                     // email!=null
+                     //     ?
+                     GestureDetector(
+                       onTap: ()async{
+                         email = await storage.read(key: email_secure);
+                         password = await storage.read(key: password_secure);
+                         print(email);
+                         print(password);
+                         BiometricAuth(context: context)
+                             .authentication(
+                             email: email,
+                             password: password,
+                             navigate: (){
+                               Api().loginWithEmailAndPassword(
+                                   email!,
+                                   password!,
+                                       ()async{
+                                     if(remember==true){
+                                       storeUserData.setBoolean(LOGGED_IN, true);
+                                     }
+                                     getProfile();
+                                   }, context
+                               );
+                             }
+                         );
+                       },
+                       child: Image.asset(
+                           height: 60,
+                           width: 60,
+                           "${ASSET_PATH}biometrics.png"),
+                     )
+                         // :Container(),
+                   ],
+                 ):Container(),
                   const SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

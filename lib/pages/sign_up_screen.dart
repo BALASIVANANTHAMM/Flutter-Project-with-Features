@@ -2,6 +2,8 @@ import 'package:expense_tracker/pages/login_screen.dart';
 import 'package:expense_tracker/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -29,6 +31,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final confirmPasswordCtl = TextEditingController();
   final incomeCtl = TextEditingController();
   bool pass=true;
+  Position? _currentLoc;
+  String? address;
+  Future<Position?> _getCurrentPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  getAddress()async{
+    Position? position = await _getCurrentPosition();
+    setState(() {
+      _currentLoc=position;
+    });
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        _currentLoc!.latitude, _currentLoc!.longitude);
+
+    setState(() {
+      address="${placemarks[0].street}, ${placemarks[0].thoroughfare}, ${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].administrativeArea} - ${placemarks[0].postalCode}";
+    });
+    print(address);
+  }
+
+  @override
+  void initState() {
+    getAddress();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -240,12 +288,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ()async{
                         if(incomeCtl.text.isNotEmpty){
                           String? fcm = await Api().firebaseMessaging.getToken();
-                          Api()
-                              .getDataFromFireSS(
-                              collectionUser: STORE_USER,
-                              collectionId: STORE_USER_ID).then((value){
-                            docId=value;
-                          });
                           setState((){
                             num a = num.parse(incomeCtl.text);
                           Future.delayed(const Duration(seconds: 2),(){
@@ -263,6 +305,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         'Date':"${Utils().formatDate(DateTime.now(),DateFormat.yMMMd())}  ${Utils().formatDate(DateTime.now(),DateFormat.jm())}",
                                         'Income':a,
                                         'docId':docId,
+                                        "latitude":"${_currentLoc!.latitude}",
+                                        "longitude":"${_currentLoc!.longitude}",
+                                        "currentAddress":"$address",
                                         'fcm':fcm,
                                         'isActive':true
                                       },
@@ -274,6 +319,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       fields: {
                                         "dateNow":DateTime.now(),
                                         "title":"Acc Created",
+                                        "latitude":"${_currentLoc!.latitude}",
+                                        "longitude":"${_currentLoc!.longitude}",
+                                        "currentAddress":"$address",
                                         "date":Utils().formatDate(DateTime.now(), DateFormat.yMMMd()),
                                         "time":Utils().formatDate(DateTime.now(), DateFormat.jm()),
                                         "value":"Account Created in ${Utils().formatDate(DateTime.now(), DateFormat.yMMMd().add_jm())}",
@@ -307,6 +355,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         context: context,
       builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: AppTheme.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
             ),
@@ -318,7 +367,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       //borderRadius: BorderRadius.circular(10)
                   ),
                   width: currentWidth-40,
-                  height: currentWidth,
+                  height: currentWidth/1.35,
                   child: SfDateRangePicker(
                     selectionColor: AppTheme.colorPrimary,
                     backgroundColor: AppTheme.white,
@@ -330,7 +379,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Get.back();
                       });
                     },
-                    showActionButtons: true,
+                    onSelectionChanged: (value){
+                      setState(() {
+                        dob = value.value;
+                        dobCtl.text=DateFormat.yMMMd().format(dob);
+                        print(dob);
+                        Get.back();
+                      });
+                    },
+                    showActionButtons: false,
                     confirmText: "Submit",
                     cancelText: "No",
                     headerStyle: DateRangePickerHeaderStyle(

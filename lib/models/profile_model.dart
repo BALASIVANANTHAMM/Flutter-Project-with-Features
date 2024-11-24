@@ -5,6 +5,9 @@ class Profile {
   String? date;
   int? income;
   String? docId;
+  String? latitude;
+  String? longitude;
+  String? address;
   String? email;
   String? fcm;
   bool? isActive;
@@ -17,6 +20,9 @@ class Profile {
         this.date,
         this.income,
         this.docId,
+        this.latitude,
+        this.longitude,
+        this.address,
         this.email,
         this.fcm,
         this.isActive,
@@ -29,6 +35,9 @@ class Profile {
     date = json['Date'];
     income = json['Income'];
     docId = json['docId'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    address = json['currentAddress'];
     email = json['email'];
     fcm = json['fcm'];
     isActive = json['isActive'];
@@ -43,6 +52,9 @@ class Profile {
     data['Date'] = this.date;
     data['Income'] = this.income;
     data['docId'] = this.docId;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['currentAddress'] = this.address;
     data['email'] = this.email;
     data['fcm'] = this.fcm;
     data['isActive'] = this.isActive;

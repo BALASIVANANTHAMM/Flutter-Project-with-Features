@@ -26,6 +26,12 @@ const String NAME = 'Name';
 const String PASSWORD = 'Password';
 const String USER_ID = 'UserId';
 
+
+//Secure Storage
+const String security_secure = 'security_secure';
+const String email_secure = 'email_secure';
+const String password_secure = 'password_secure';
+
 //Languages
 const String wel_1 = 'wel_1';
 const String wel_2 = 'wel_2';
@@ -88,6 +94,7 @@ const String lang_bi = 'lang_bi';
 const String ch_pa_bi = 'ch_pa_bi';
 const String ab_se = 'ab_se';
 const String new_bo = 'new_bo';
+const String new_or = 'new_or';
 
 const String jan_ = 'jan_';
 const String feb_ = 'feb_';

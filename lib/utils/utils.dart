@@ -239,78 +239,82 @@ class Utils{
       String image,
       List<Expenses> list,
       int index,
-      Color color
+      Color color,
+      VoidCallback navigation
       ){
     var currentWidth = MediaQuery.of(context).size.width;
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24)
-      ),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5
-      ),
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      color: color
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Image.asset("${ASSET_PATH}$image"),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CText(
-                      text: list[index].status,
-                      fontWeight: FontWeight.w600,
-                      fontSize: AppTheme.large,
+    return GestureDetector(
+      onTap: navigation,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24)
+        ),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 5
+        ),
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: color
                     ),
-                    CText(
-                      text: list[index].filter,
-                      textColor: AppTheme.grey,
-                      fontSize: AppTheme.thirteen,
-                      fontWeight: FontWeight.w400,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Image.asset("${ASSET_PATH}$image"),
                     ),
-                  ],
-                ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                CText(
-                  text: "₹${list[index].amount}",
-                  fontWeight: FontWeight.w600,
-                  fontSize: AppTheme.large,
-                  textColor: AppTheme.red,
-                ),
-                CText(
-                  text: list[index].time,
-                  textColor: AppTheme.grey,
-                  fontSize: AppTheme.medium_15,
-                  fontWeight: FontWeight.w500,
-                ),
-              ],
-            ),
-          ],
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CText(
+                        text: list[index].status,
+                        fontWeight: FontWeight.w600,
+                        fontSize: AppTheme.large,
+                      ),
+                      CText(
+                        text: list[index].filter,
+                        textColor: AppTheme.grey,
+                        fontSize: AppTheme.thirteen,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  CText(
+                    text: "₹${list[index].amount}",
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppTheme.large,
+                    textColor: AppTheme.red,
+                  ),
+                  CText(
+                    text: list[index].time,
+                    textColor: AppTheme.grey,
+                    fontSize: AppTheme.medium_15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
