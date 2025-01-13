@@ -60,58 +60,61 @@ class _HomeState extends State<Home> {
   ];
   int bottomNavIndex=0;
 
-  Position? _currentLoc;
-  String? address;
-  Future<Position?> _getCurrentPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  getAddress()async{
-    Position? position = await _getCurrentPosition();
-    setState(() {
-      _currentLoc=position;
-    });
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        _currentLoc!.latitude, _currentLoc!.longitude);
-
-    setState(() {
-      address="${placemarks[0].street}, ${placemarks[0].thoroughfare}, ${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].administrativeArea} - ${placemarks[0].postalCode}";
-    });
-    print(address);
-  }
+  // Position? _currentLoc;
+  // String? address;
+  // _getCurrentPosition() async {
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   bool loc = await Geolocator.isLocationServiceEnabled();
+  //
+  //   if(permission==LocationPermission.denied){
+  //     permission = await Geolocator.requestPermission();
+  //     loc==false?await Geolocator.openLocationSettings():'';
+  //     if(permission != LocationPermission.whileInUse ||
+  //         permission != LocationPermission.always){
+  //       return;
+  //     }
+  //   }
+  //   return await Geolocator.getCurrentPosition();
+  // }
+  //
+  // getAddress()async{
+  //   Position? position = await _getCurrentPosition();
+  //   setState(() {
+  //     _currentLoc=position;
+  //   });
+  //   List<Placemark> placemarks = await placemarkFromCoordinates(
+  //       _currentLoc!.latitude, _currentLoc!.longitude);
+  //
+  //   if(placemarks.isNotEmpty){
+  //     var addresses = '';
+  //     var street = [];
+  //     for(var i in placemarks){
+  //       if(i.thoroughfare!.isNotEmpty){
+  //         street.add(i.thoroughfare);
+  //       }
+  //     }
+  //     addresses += placemarks.reversed.last.street!;
+  //     addresses += ", ${street[0]}";
+  //     addresses += ', ${placemarks.reversed.last.locality ?? ''}';
+  //     addresses += ', ${placemarks.reversed.last.administrativeArea ?? ''}';
+  //     addresses += ', ${placemarks.reversed.last.postalCode ?? ''}';
+  //     addresses += ', ${placemarks.reversed.last.country ?? ''}';
+  //     setState(() {
+  //       address = addresses;
+  //     });
+  //   }
+  //
+  //   print(address);
+  //   print(placemarks);
+  // }
 
   @override
   void initState() {
-    getAddress();
+    // _getCurrentPosition().then((value){
+    //   getAddress();
+    // });
     menuItems;
     text;
-    Future.delayed(const Duration(seconds: 2),(){
-      setState(() {
-        isLoading=false;
-      });
-      showLocationDialog();
-    });
     super.initState();
   }
 
@@ -135,7 +138,7 @@ class _HomeState extends State<Home> {
         backgroundColor: AppTheme.colorPrimary,
           shape: const CircleBorder(),
           onPressed: (){
-          getAddress();
+          //getAddress();
             Future.delayed(Duration(milliseconds: 1200),(){
               showBottomAdd();
             });
@@ -377,9 +380,6 @@ class _HomeState extends State<Home> {
                                   "filter":isFilter==true?exp_bal.tr:tr_bi.tr,
                                   "sort":isSort==true?hi_bi.tr:low_bi.tr,
                                   "amount":a,
-                                  "latitude":"${_currentLoc!.latitude}",
-                                  "longitude":"${_currentLoc!.longitude}",
-                                  "currentAddress":"$address",
                                   "notes":notesCtl.text,
                                   "status":initialValue,
                                   "statusId":menuItems.indexOf(initialValue!)+1,
@@ -477,58 +477,6 @@ class _HomeState extends State<Home> {
           ),
         ),
       ],
-    );
-  }
-  showLocationDialog(){
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12)
-          ),
-          backgroundColor: AppTheme.light,
-          content: StatefulBuilder(
-            builder: (BuildContext context, void Function(void Function()) setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                      height: 45,
-                      width: 45,
-                      "${ASSET_PATH}app_logo.png"),
-                  CText(
-                    text: "Currently you are in",
-                    fontSize: AppTheme.large,
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.w600,
-                    textColor: AppTheme.red,
-                  ),
-                  const SizedBox(height: 10,),
-                  CText(
-                    text: "$address",
-                    fontSize: AppTheme.big,
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  const SizedBox(height: 28,),
-                  Utils().getAlertButton(
-                      context,
-                      "Cancel",
-                      "OK",
-                          (){
-                        Get.back();
-                      },
-                          (){
-                        Get.back();
-                      }
-                  )
-                ],
-              );
-            },),
-        );
-      },
-
     );
   }
 }

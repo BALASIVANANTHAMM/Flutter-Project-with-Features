@@ -42,44 +42,49 @@ class _LoginScreenState extends State<LoginScreen> {
   ));
   Position? _currentLoc;
   String? address;
-  Future<Position?> _getCurrentPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  getAddress()async{
-    Position? position = await _getCurrentPosition();
-    setState(() {
-      _currentLoc=position;
-    });
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        _currentLoc!.latitude, _currentLoc!.longitude);
-
-    setState(() {
-      address="${placemarks[0].street}, ${placemarks[0].thoroughfare}, ${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].administrativeArea} - ${placemarks[0].postalCode}";
-    });
-    print(address);
-  }
+  // _getCurrentPosition() async {
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //
+  //   if(permission==LocationPermission.denied){
+  //     permission = await Geolocator.requestPermission();
+  //     if(permission != LocationPermission.whileInUse ||
+  //         permission != LocationPermission.always){
+  //       return;
+  //     }
+  //   }
+  //   return await Geolocator.getCurrentPosition();
+  // }
+  //
+  // getAddress()async{
+  //   Position? position = await _getCurrentPosition();
+  //   setState(() {
+  //     _currentLoc=position;
+  //   });
+  //   List<Placemark> placemarks = await placemarkFromCoordinates(
+  //       _currentLoc!.latitude, _currentLoc!.longitude);
+  //
+  //   if(placemarks.isNotEmpty){
+  //     var addresses = '';
+  //     var street = [];
+  //     for(var i in placemarks){
+  //       if(i.thoroughfare!.isNotEmpty){
+  //         street.add(i.thoroughfare);
+  //       }
+  //     }
+  //     addresses += placemarks.reversed.last.street!;
+  //     addresses += ", ${street[0]}";
+  //     addresses += ', ${placemarks.reversed.last.locality ?? ''}';
+  //     addresses += ', ${placemarks.reversed.last.administrativeArea ?? ''}';
+  //     addresses += ', ${placemarks.reversed.last.postalCode ?? ''}';
+  //     addresses += ', ${placemarks.reversed.last.country ?? ''}';
+  //     setState(() {
+  //       address = addresses;
+  //     });
+  //   }
+  //
+  //   print(address);
+  //   print(placemarks);
+  // }
 
   getProfile() async{
     QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -94,32 +99,29 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading=false;
         if(isActive!=null){
           if(isActive==true){
-            storeUserData.setString(DOB, "${profile[0].dOB}");
-            storeUserData.setString(CREATE_DATE, "${profile[0].date}");
-            storeUserData.setInt(INCOME, profile[0].income!.toInt());
-            storeUserData.setString(DOC_ID, "${profile[0].docId}");
-            storeUserData.setString(EMAIL, "${profile[0].email}");
-            storeUserData.setString(FCM, "${profile[0].fcm}");
-            storeUserData.setBoolean(IS_ACTIVE, isActive!);
-            storeUserData.setString(NAME, "${profile[0].name}");
-            storeUserData.setString(PASSWORD, "${profile[0].password}");
-            storeUserData.setString(USER_ID, "${profile[0].userId}");
-            Api().addDataFromUi(
-                fields: {
-                  "dateNow":DateTime.now(),
-                  "title":"Logged In",
-                  "latitude":"${_currentLoc!.latitude}",
-                  "longitude":"${_currentLoc!.longitude}",
-                  "currentAddress":"$address",
-                  "date":Utils().formatDate(DateTime.now(), DateFormat.yMMMd()),
-                  "time":Utils().formatDate(DateTime.now(), DateFormat.jm()),
-                  "value":"Account Logged in ${Utils().formatDate(DateTime.now(), DateFormat.yMMMd().add_jm())}",
-                },
-                collectionUser: STORE_NOTI,
-                collectionId: STORE_NOTI_EMAIL,
-                context: context
-            );
-            Get.offAll(const Home());
+              storeUserData.setString(DOB, "${profile[0].dOB}");
+              storeUserData.setString(CREATE_DATE, "${profile[0].date}");
+              storeUserData.setInt(INCOME, profile[0].income!.toInt());
+              storeUserData.setString(DOC_ID, "${profile[0].docId}");
+              storeUserData.setString(EMAIL, "${profile[0].email}");
+              storeUserData.setString(FCM, "${profile[0].fcm}");
+              storeUserData.setBoolean(IS_ACTIVE, isActive!);
+              storeUserData.setString(NAME, "${profile[0].name}");
+              storeUserData.setString(PASSWORD, "${profile[0].password}");
+              storeUserData.setString(USER_ID, "${profile[0].userId}");
+              Api().addDataFromUi(
+                  fields: {
+                    "dateNow":DateTime.now(),
+                    "title":"Logged In",
+                    "date":Utils().formatDate(DateTime.now(), DateFormat.yMMMd()),
+                    "time":Utils().formatDate(DateTime.now(), DateFormat.jm()),
+                    "value":"Account Logged in ${Utils().formatDate(DateTime.now(), DateFormat.yMMMd().add_jm())}",
+                  },
+                  collectionUser: STORE_NOTI,
+                  collectionId: STORE_NOTI_EMAIL,
+                  context: context
+              );
+              Get.offAll(const Home());
           }else{
             Utils().snackBar(context, "Your Account is Expired");
           }
@@ -136,7 +138,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    getAddress();
+    // _getCurrentPosition().then((value){
+    //   getAddress();
+    // });
     setState(() {
       getStore();
     });
@@ -345,7 +349,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: (){
-                          Get.to(const SignUpScreen());
+                          Get.to( SignUpScreen());
                         },
                         child:  CText(
                           text:sign_up.tr,

@@ -6,9 +6,6 @@ class Expenses {
   String? sort;
   num? amount;
   String? notes;
-  String? latitude;
-  String? longitude;
-  String? address;
   String? status;
   int? statusId;
   String? date;
@@ -24,9 +21,6 @@ class Expenses {
         this.sort,
         this.amount,
         this.notes,
-        this.latitude,
-        this.longitude,
-        this.address,
         this.status,
         this.statusId,
         this.date,
@@ -42,9 +36,6 @@ class Expenses {
     sort = json['sort'];
     notes = json['notes'];
     amount = json['amount'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    address = json['currentAddress'];
     status = json['status'];
     statusId = json['statusId'];
     date = json['date'];
@@ -62,9 +53,6 @@ class Expenses {
     data['sort'] = this.sort;
     data['notes'] = this.notes;
     data['amount'] = this.amount;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['currentAddress'] = this.address;
     data['status'] = this.status;
     data['statusId'] = this.statusId;
     data['date'] = this.date;

@@ -31,50 +31,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final confirmPasswordCtl = TextEditingController();
   final incomeCtl = TextEditingController();
   bool pass=true;
-  Position? _currentLoc;
-  String? address;
-  Future<Position?> _getCurrentPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  getAddress()async{
-    Position? position = await _getCurrentPosition();
-    setState(() {
-      _currentLoc=position;
-    });
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        _currentLoc!.latitude, _currentLoc!.longitude);
-
-    setState(() {
-      address="${placemarks[0].street}, ${placemarks[0].thoroughfare}, ${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].administrativeArea} - ${placemarks[0].postalCode}";
-    });
-    print(address);
-  }
 
   @override
   void initState() {
-    getAddress();
     super.initState();
   }
 
@@ -305,9 +264,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         'Date':"${Utils().formatDate(DateTime.now(),DateFormat.yMMMd())}  ${Utils().formatDate(DateTime.now(),DateFormat.jm())}",
                                         'Income':a,
                                         'docId':docId,
-                                        "latitude":"${_currentLoc!.latitude}",
-                                        "longitude":"${_currentLoc!.longitude}",
-                                        "currentAddress":"$address",
                                         'fcm':fcm,
                                         'isActive':true
                                       },
@@ -319,9 +275,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       fields: {
                                         "dateNow":DateTime.now(),
                                         "title":"Acc Created",
-                                        "latitude":"${_currentLoc!.latitude}",
-                                        "longitude":"${_currentLoc!.longitude}",
-                                        "currentAddress":"$address",
                                         "date":Utils().formatDate(DateTime.now(), DateFormat.yMMMd()),
                                         "time":Utils().formatDate(DateTime.now(), DateFormat.jm()),
                                         "value":"Account Created in ${Utils().formatDate(DateTime.now(), DateFormat.yMMMd().add_jm())}",

@@ -1,17 +1,18 @@
 import 'package:expense_tracker/pages/splash.dart';
 import 'package:expense_tracker/utils/constants.dart';
 import 'package:expense_tracker/utils/store_user_data.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'controls/LanguageControlls.dart';
 
-Future<void> main() async{
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await StoreUserData.init();
-  // await FirebaseAppCheck.instance.activate();
-  Firebase.initializeApp(
+  await Firebase.initializeApp(
+    name: "Expense Tracker",
     options: const FirebaseOptions(
         apiKey: "AIzaSyCQ1SMRR1M_xv3jd_rGnfa6FhzzGk37grA",
         authDomain: "expense-af9b2.firebaseapp.com",

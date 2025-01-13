@@ -538,35 +538,35 @@ class _ExpensePageState extends State<ExpensePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CText(
-                        text: "Location",
-                        fontSize: AppTheme.large,
-                        textAlign: TextAlign.center,
-                        fontWeight: FontWeight.w500,
-                        textColor: AppTheme.grey,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Icon(Icons.location_on_outlined),
-                          Flexible(
-                            child: CText(
-                              text: "${expense.address}",
-                              fontSize: AppTheme.large,
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.visible,
-                              fontWeight: FontWeight.w600,
-                              textColor: AppTheme.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  //const SizedBox(height: 10,),
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     CText(
+                  //       text: "Location",
+                  //       fontSize: AppTheme.large,
+                  //       textAlign: TextAlign.center,
+                  //       fontWeight: FontWeight.w500,
+                  //       textColor: AppTheme.grey,
+                  //     ),
+                  //     Row(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         const Icon(Icons.location_on_outlined),
+                  //         Flexible(
+                  //           child: CText(
+                  //             text: "${expense.address}",
+                  //             fontSize: AppTheme.large,
+                  //             textAlign: TextAlign.start,
+                  //             overflow: TextOverflow.visible,
+                  //             fontWeight: FontWeight.w600,
+                  //             textColor: AppTheme.black,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 10,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
